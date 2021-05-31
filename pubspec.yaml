@@ -1,0 +1,91 @@
+name: connect
+description: A new social application.
+
+
+publish_to: 'none' # Remove this line if you wish to publish to pub.dev
+
+
+version: 1.0.0+1
+
+environment:
+  sdk: ">=2.7.0 <3.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  cupertino_icons: ^1.0.0
+  flutter_svg: ^0.19.1
+  #blur_bottom_bar: ^1.0.1
+  ionicons: ^0.0.3
+  expandable_text: ^0.1.0
+  intl: ^0.16.1
+  #animated_splash_screen: ^1.0.1+2
+
+  provider: ^4.3.2+2
+  shared_preferences: ^0.5.12+2
+  image_picker: ^0.6.7+12
+  image_cropper: ^1.3.1
+  cached_network_image:
+  fluttertoast: ^3.1.3
+  octo_image: ^0.3.0
+  connectivity: ^2.0.1
+  data_connection_checker:
+
+  cloud_firestore:
+  firebase_auth  : ^0.15.2
+  google_sign_in : ^4.0.4
+  firebase_storage: ^3.1.6
+  firebase_core: 0.4.0+8
+  #firebase_storage: 3.0.4
+  rxdart: ^0.21.0
+
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
+flutter:
+
+  uses-material-design: true
+
+  # To add assets to your application, add an assets section, like this:
+  assets:
+    - assets/images/
+  #   - images/a_dot_ham.jpeg
+
+  # An image asset can refer to one or more resolution-specific "variants", see
+  # https://flutter.dev/assets-and-images/#resolution-aware.
+
+  # For details regarding adding assets from package dependencies, see
+  # https://flutter.dev/assets-and-images/#from-packages
+
+  # To add custom fonts to your application, add a fonts section here,
+  # in this "flutter" section. Each entry in this list should have a
+  # "family" key with the font family name, and a "fonts" key with a
+  # list giving the asset and other descriptors for the font. For
+  # example:
+  fonts:
+    - family: Pacifico
+      fonts:
+        - asset: assets/fonts/Pacifico-Regular.ttf
+  #       - asset: fonts/Schyler-Italic.ttf
+  #         style: italic
+    - family: Source Sans Pro
+      fonts:
+        - asset: assets/fonts/Source_Sans_Pro/SourceSansPro-SemiBoldItalic.ttf
+
+    - family: Karla
+      fonts:
+        - asset: assets/fonts/Karla/Karla-Regular.ttf
+
+    - family: Open_Sans
+      fonts:
+        - asset: assets/fonts/Source_Sans_Pro/SourceSansPro-Regular.ttf
+        - asset: assets/fonts/Source_Sans_Pro/SourceSansPro-SemiBold.ttf
+  #        style: bold
+  #       - asset: fonts/TrajanPro_Bold.ttf
+  #         weight: 700
+  #
+  # For details regarding fonts from package dependencies,
+  # see https://flutter.dev/custom-fonts/#from-packages

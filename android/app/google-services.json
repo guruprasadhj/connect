@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "763162808592",
+    "firebase_url": "https://connectecurely.firebaseio.com",
+    "project_id": "connectecurely",
+    "storage_bucket": "connectecurely.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:763162808592:android:55b2ca0a6811e1e2915595",
+        "android_client_info": {
+          "package_name": "com.cup.connect"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "763162808592-juss2q3gv6nkchfk3msskuobv1mkmakt.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.cup.connect",
+            "certificate_hash": "4c5cce4c49890dcb8e8d5886aa830113032f5b95"
+          }
+        },
+        {
+          "client_id": "763162808592-9cteobrvnb153bjoddte66l3b5hdues4.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBX_XlGBzg-UTUR4ui2fg7QOHVlC4lDVqk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "763162808592-9cteobrvnb153bjoddte66l3b5hdues4.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
