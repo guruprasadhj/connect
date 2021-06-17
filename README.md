@@ -1,7 +1,6 @@
 <img src="/assets/images/logo_for_github.png" align="right" />
 
-## Tuby
-
+## connect
 ### Connect . to  . people 😊 
 
 A New way of messaging experience.
