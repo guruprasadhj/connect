@@ -1,4 +1,4 @@
-+<img src="/assets/images/logo_for_github.png" align="right" />
+<img src="/assets/images/logo_for_github.png" align="right" />
 # connect
 ### Connect . to  . people 😊 
 
