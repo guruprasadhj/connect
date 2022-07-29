@@ -1,9 +1,8 @@
-import 'package:connect/login.dart';
-import 'package:connect/themeProvider.dart';
+import 'package:connect/helpers/constants.dart';
+import 'package:connect/helpers/helperfunction.dart';
+import 'package:connect/views/default/main_page.dart';
+import 'package:connect/views/intros/welcome.dart';
 import 'package:flutter/material.dart';
-
-import 'conversationScreen.dart';
-import 'mainPage.dart';
 
 void main() {
   runApp(MyApp());
@@ -16,19 +15,42 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  DarkThemeProvider themeChangeProvider = new DarkThemeProvider();
+  bool userIsLoggedIn;
+
+  @override
+  void initState() {
+    getLoggedInState();
+    super.initState();
+  }
+
+  getLoggedInState() async {
+    await HelperFunction.getUserLoggedInSharedPreference().then((value){
+      setState(() {
+        userIsLoggedIn  = value;
+      });
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Connect Demo',
+      title: 'Connect',
+      debugShowCheckedModeBanner: false,
       theme: ThemeData(
-        primarySwatch: Colors.blue,
-        //canvasColor: Colors.blue
+          appBarTheme: AppBarTheme(
+            //color: Color(0xffd80147),
+          ),
+        backgroundColor: Color(0xff0d0d0d),
+        primarySwatch: Colors.red,
+        brightness: Constants.mode==false? Brightness.light : Brightness.dark,
+        visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      home: Login(),
-
-    );
+      home:  userIsLoggedIn != null ?  userIsLoggedIn ? MainPage() : Welcome()
+        : Container(
+    child: Center(
+    child: Welcome(),
+    ),
+    ));
   }
 }
-
 
