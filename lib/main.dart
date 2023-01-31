@@ -1,56 +1,54 @@
-import 'package:connect/helpers/constants.dart';
-import 'package:connect/helpers/helperfunction.dart';
-import 'package:connect/views/default/main_page.dart';
-import 'package:connect/views/intros/welcome.dart';
+import 'package:connect/screens/home_screens/home_screen.dart';
+import 'package:connect/screens/loader.dart';
+import 'package:connect/screens/login_screens/login_screen.dart';
+import 'package:connect/screens/register.dart';
+import 'package:connect/screens/signup.dart';
+import 'package:connect/screens/verify.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'firebase_options.dart';
+import 'package:connect/screens/login.dart';
+import 'package:connect/screens/home.dart';
 
-void main() {
-  runApp(MyApp());
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
+  runApp(const MyApp());
 }
 
-class MyApp extends StatefulWidget {
-  // This widget is the root of your application.
-  @override
-  _MyAppState createState() => _MyAppState();
-}
-
-class _MyAppState extends State<MyApp> {
-  bool userIsLoggedIn;
-
-  @override
-  void initState() {
-    getLoggedInState();
-    super.initState();
-  }
-
-  getLoggedInState() async {
-    await HelperFunction.getUserLoggedInSharedPreference().then((value){
-      setState(() {
-        userIsLoggedIn  = value;
-      });
-    });
-  }
-
+class MyApp extends StatelessWidget {
+  const MyApp({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Connect',
-      debugShowCheckedModeBanner: false,
+      title: 'connect',
       theme: ThemeData(
-          appBarTheme: AppBarTheme(
-            //color: Color(0xffd80147),
-          ),
-        backgroundColor: Color(0xff0d0d0d),
-        primarySwatch: Colors.red,
-        brightness: Constants.mode==false? Brightness.light : Brightness.dark,
-        visualDensity: VisualDensity.adaptivePlatformDensity,
+        primarySwatch: Colors.blue,
       ),
-      home:  userIsLoggedIn != null ?  userIsLoggedIn ? MainPage() : Welcome()
-        : Container(
-    child: Center(
-    child: Welcome(),
-    ),
-    ));
+      home: const MainPage(),
+    );
   }
 }
 
+class MainPage extends StatelessWidget {
+  const MainPage({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: StreamBuilder<User?>(
+        stream: FirebaseAuth.instance.authStateChanges(),
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            return HomeScreen();// HomePage();
+          } else {
+            return LoginScreen();
+          }
+        },
+      ),
+    );
+  }
+}

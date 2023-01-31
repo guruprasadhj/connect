@@ -1,48 +1,35 @@
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:connect/screens/home.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 
-class DatabaseMethods{
-
-  uploadUserInfo(userMap){
-    Firestore.instance.collection("users").add(userMap);
-  }
-
-  getUserByUsername(String username)async{
-    return await Firestore.instance.collection("users").where("username",isEqualTo: username ).getDocuments();
-  }
-
-  getUserByUserEmail(String userEmail)async{
-    return await Firestore.instance.collection("users").where("email",isEqualTo: userEmail ).getDocuments();
-  }
-
-  createChatRoom(String chatRoomId, chatRoomMap){
-    Firestore.instance.collection("ChatRooms").document(chatRoomId).setData(chatRoomMap).catchError((e){
+class DatabaseMethods {
+  Future<void> addUserInfo(userData) async {
+    FirebaseFirestore.instance.collection("users").add(userData).catchError((e)
+    {
       print(e.toString());
     });
   }
 
-  addConversationMessages(String chatRoomId, messageMap){
-    Firestore.instance.collection("ChatRooms")
-        .document(chatRoomId)
-        .collection("chats")
-        .add(messageMap).catchError((e){
-          print(e.toString());});
-  }
-  getConversationMessages(String chatRoomId)async{
-    return await Firestore.instance
-        .collection("ChatRooms")
-        .document(chatRoomId)
-        .collection("chats")
-        .orderBy("time",descending: false)
-        .snapshots();
+  updateUserInfo({required String id,required Map<String,dynamic>updateData}){
+    FirebaseFirestore.instance
+        .collection("users").doc(id).update(updateData).catchError((e){
+          print(e.toString());
+    });
   }
 
-  getChatRooms(String userName)async{
-    return await Firestore.instance.
-    collection("ChatRooms")
-        .where("users", arrayContains: userName).orderBy("time",descending: true).snapshots();
+  getUserInfo(String email) {
+    return FirebaseFirestore.instance
+        .collection("users")
+        .where("email", isEqualTo: email)
+        .get();
   }
 
-  getRecentUsers() {}
-
+  searchByName(String searchField) {
+    return FirebaseFirestore.instance
+        .collection("users")
+        .where('username', isEqualTo: searchField)
+        .get();
+  }
 }

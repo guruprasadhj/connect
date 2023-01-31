@@ -15,13 +15,34 @@
       },
       "oauth_client": [
         {
-          "client_id": "205798337458-uheh8s24b0ipf6260su0s1a3gqmch37j.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.connect.people",
-            "certificate_hash": "fa513487a670b2a55a9bd445c51116a03c6efcd0"
-          }
-        },
+          "client_id": "205798337458-7hjr9omggvvg70b5sovrdda5qntp69sh.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCve-J5JNikb-ob4MEO15VeaCQ8be1HHe0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "205798337458-7hjr9omggvvg70b5sovrdda5qntp69sh.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:205798337458:android:e2d56aafe8ea9d36dad2ab",
+        "android_client_info": {
+          "package_name": "com.guruprasadhj.connect"
+        }
+      },
+      "oauth_client": [
         {
           "client_id": "205798337458-7hjr9omggvvg70b5sovrdda5qntp69sh.apps.googleusercontent.com",
           "client_type": 3
