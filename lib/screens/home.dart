@@ -441,7 +441,7 @@ class _HomePageState extends State<HomePage>
                                                       type: PageTransitionType
                                                           .fade,
                                                       child:
-                                                          const LoginPage()));
+                                                      const LoginPage()));
                                             },
                                             child: const Padding(
                                               padding: EdgeInsets.only(

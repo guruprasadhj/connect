@@ -4,10 +4,12 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:glassmorphism/glassmorphism.dart';
 import 'package:page_transition/page_transition.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../helper/chatUser.dart';
 import '../../helper/constants.dart';
 import '../../services/database.dart';
+import '../../utils/show_alert.dart';
 import '../home.dart';
 import '../login.dart';
 class HomeWebScreen extends StatefulWidget {
@@ -20,77 +22,63 @@ class HomeWebScreen extends StatefulWidget {
 class _HomeWebScreenState extends State<HomeWebScreen> with SingleTickerProviderStateMixin {
   final Tween<double> _tween1 = Tween(begin: 0.3, end: 0.5);
   final Tween<double> _tween2 = Tween(begin: 0.3, end: 0.5);
-  late final AnimationController _controller;
-  late final Animation<double> _animation;
-  late final Animation<Offset> _offsetAnimation;
+  // late final AnimationController _controller;
+  // late final Animation<double> _animation;
+  // late final Animation<Offset> _offsetAnimation;
+  late final AnimationController _controller = AnimationController(
+    duration: const Duration(seconds: 2),
+    vsync: this,
+  )..repeat(reverse: true);
+  late final Animation<double> _animation = CurvedAnimation(
+    parent: _controller,
+    curve: Curves.fastOutSlowIn,
+  );
+  late final Animation<Offset> _offsetAnimation = Tween<Offset>(
+    begin: Offset.zero,
+    end: const Offset(1.5, 0.0),
+  ).animate(CurvedAnimation(
+    parent: _controller,
+    curve: Curves.fastOutSlowIn,
+  ));
+  final Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
+  late String emailId;
+  late String username;
   bool isSearching=false;
-  bool isSearchScreen=true;
+  bool isSearchScreen=false;
   bool isLoading=false;
   bool haveUserSearched = false;
   TextEditingController searchEditingController = TextEditingController();
   DatabaseMethods databaseMethods = DatabaseMethods();
   late QuerySnapshot searchResultSnapshot;
-  List<ChatUsers> chatUsers = [
-    ChatUsers(
-        name: "Jane Russel",
-        messageText: "Awesome Setup",
-        imageURL: "assets/images/default_profile.jpg",
-        time: "Now"),
-    ChatUsers(
-        name: "Glady's Murphy",
-        messageText: "That's Great",
-        imageURL: "assets/images/default_profile.jpg",
-        time: "Yesterday"),
-    ChatUsers(
-        name: "Jorge Henry",
-        messageText: "Hey where are you?",
-        imageURL: "assets/images/default_profile.jpg",
-        time: "31 Mar"),
-    ChatUsers(
-        name: "Philip Fox",
-        messageText: "Busy! Call me in 20 mins",
-        imageURL: "assets/images/default_profile.jpg",
-        time: "28 Mar"),
-    ChatUsers(
-        name: "Debra Hawkins",
-        messageText: "Thankyou, It's awesome",
-        imageURL: "assets/images/default_profile.jpg",
-        time: "23 Mar"),
-    ChatUsers(
-        name: "Jacob Pena",
-        messageText: "will update you in evening",
-        imageURL: "assets/images/default_profile.jpg",
-        time: "17 Mar"),
-    ChatUsers(
-        name: "Andrey Jones",
-        messageText: "Can you please share the file?",
-        imageURL: "assets/images/default_profile.jpg",
-        time: "24 Feb"),
-    ChatUsers(
-        name: "John Wick",
-        messageText: "How are you?",
-        imageURL: "assets/images/default_profile.jpg",
-        time: "18 Feb"),
-  ];
+
 
   @override
   void initState() {
     setState(()=>isLoading=true);
-    _controller = AnimationController(
-      duration: const Duration(seconds: 2),
-      vsync: this,
-    )..repeat(reverse: true);
-    _animation = CurvedAnimation(
-      parent: _controller,
-      curve: Curves.fastOutSlowIn,
-    );
-    _offsetAnimation = Tween<Offset>(
-      begin: Offset.zero,
-      end: const Offset(1.5, 0.0),
-    ).animate(CurvedAnimation(
-      parent: _controller,
-      curve: Curves.fastOutSlowIn,
-    ));
+    // _controller = AnimationController(
+    //   duration: const Duration(seconds: 2),
+    //   vsync: this,
+    // )..repeat(reverse: true);
+    // _animation = CurvedAnimation(
+    //   parent: _controller,
+    //   curve: Curves.fastOutSlowIn,
+    // );
+    // _offsetAnimation = Tween<Offset>(
+    //   begin: Offset.zero,
+    //   end: const Offset(1.5, 0.0),
+    // ).animate(CurvedAnimation(
+    //   parent: _controller,
+    //   curve: Curves.fastOutSlowIn,
+    // ));
+    _prefs.then((SharedPreferences preps) {
+      setState(() {
+        username = preps.getString(Constants.sharedPreferenceUserNameKey) ??
+            "username";
+        emailId =
+            preps.getString(Constants.sharedPreferenceUserEmailKey) ?? "email";
+      });
+    });
+
     setState(()=>isLoading=false);
     super.initState();
   }
@@ -117,9 +105,11 @@ class _HomeWebScreenState extends State<HomeWebScreen> with SingleTickerProvider
     final currentWidth = MediaQuery.of(context).size.width;
     final currentHeight = MediaQuery.of(context).size.height;
     return Scaffold(
-      body: isLoading?Center(
+      body: isLoading?
+      Center(
         child: CircularProgressIndicator(),
-      ):Stack(
+      )
+          :Stack(
         children: [
           Container(
             decoration: const BoxDecoration(
@@ -199,8 +189,8 @@ class _HomeWebScreenState extends State<HomeWebScreen> with SingleTickerProvider
               child: Padding(
                 padding: const EdgeInsets.all(8),
                 child:  GlassmorphicContainer(
-                  width: currentWidth,
-                  height: currentHeight,
+                  width: currentWidth-10,
+                  height: currentHeight-10,
                   borderRadius: 50,
                   blur: 20,
                   alignment: Alignment.bottomCenter,
@@ -244,9 +234,15 @@ class _HomeWebScreenState extends State<HomeWebScreen> with SingleTickerProvider
                               minWidth: 300,
                             ),
                             padding: EdgeInsets.all(10.0),
-                            child: isSearchScreen?Row(
+                            child: isSearchScreen?
+                            Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
+                                IconButton(
+                                    onPressed: (){
+                                      setState(()=>isSearchScreen =!isSearchScreen);
+                                    },
+                                    icon: Icon(Icons.arrow_back_rounded,color: Colors.black,)),
                                 Container(
                                   width: (currentWidth/4)-90,
                                   margin: EdgeInsets.symmetric(horizontal: 10.0),
@@ -255,17 +251,14 @@ class _HomeWebScreenState extends State<HomeWebScreen> with SingleTickerProvider
                                     onChanged: (value){},
                                     decoration: InputDecoration(
                                       hintText: "Search",
-                                      prefixIcon: Icon(Icons.search_rounded)
+                                      suffixIcon: Icon(Icons.search_rounded)
                                     ),
                                   ),
                                 ),
-                                IconButton(
-                                    onPressed: (){
-                                      setState(()=>isSearchScreen =!isSearchScreen);
-                                    },
-                                    icon: Icon(Icons.close_rounded,color: Colors.black,)),
+
                               ],
-                            ):Row(
+                            )
+                                :Row(
                               crossAxisAlignment: CrossAxisAlignment.center,
                               children: [
                                 CircleAvatar(
@@ -288,9 +281,26 @@ class _HomeWebScreenState extends State<HomeWebScreen> with SingleTickerProvider
                                   mainAxisAlignment: MainAxisAlignment.start,
                                   children: [
                                      Padding(
-                                      padding: EdgeInsets.only(
+                                      padding: const EdgeInsets.only(
                                           right: 10, left: 10,bottom: 15),
-                                      child: Icon(Icons.logout),
+                                      child: IconButton(
+                                          onPressed: (){
+                                            DialogUtils.showCustomDialog(context,
+                                              title: "Do you wanna LogOut ?",
+                                              action: () async {
+                                                Constants.Logout();
+                                                FirebaseAuth.instance.signOut();
+                                                Navigator.pushReplacement(
+                                                    context,
+                                                    PageTransition(
+                                                        type: PageTransitionType
+                                                            .fade,
+                                                        child:
+                                                        const LoginPage()));
+                                              },);
+
+                                          },
+                                          icon: const Icon(Icons.logout)),
                                     ),
                                     IconButton(onPressed: (){
                                       setState(()=>isSearchScreen =!isSearchScreen);
@@ -305,11 +315,15 @@ class _HomeWebScreenState extends State<HomeWebScreen> with SingleTickerProvider
                                   padding: const EdgeInsets.all(20.0),
                                   child: Image.asset("assets/images/search-illustration.png"),
                                 ),)
-                                :ListView.builder(
-                                itemCount: chatUsers.length,
-                                itemBuilder: (context, index) {
-                                  return ChatCard();
-                                })
+                                :Expanded(
+                                  child: ListView.builder(
+                              // physics: NeverScrollableScrollPhysics(),
+                              shrinkWrap: true,
+                                  itemCount: chatUsers.length,
+                                  itemBuilder: (context, index) {
+                                    return ChatCard(chatUsers: chatUsers[index],);
+                                  }),
+                                )
                           ],
                         ),
                       )
@@ -560,4 +574,46 @@ class _HomeWebScreenState extends State<HomeWebScreen> with SingleTickerProvider
       ),
     );
   }
+  List<ChatUsers> chatUsers = [
+    ChatUsers(
+        name: "Jane Russel",
+        messageText: "Awesome Setup",
+        imageURL: "assets/avatars/avatar_1.png",
+        time: "Now"),
+    ChatUsers(
+        name: "Glady's Murphy",
+        messageText: "That's Great",
+        imageURL: "assets/avatars/avatar_3.png",
+        time: "Yesterday"),
+    ChatUsers(
+        name: "Jorge Henry",
+        messageText: "Hey where are you?",
+        imageURL: "assets/avatars/avatar_2.png",
+        time: "31 Mar"),
+    ChatUsers(
+        name: "Philip Fox",
+        messageText: "Busy! Call me in 20 mins",
+        imageURL: "assets/avatars/avatar_1.png",
+        time: "28 Mar"),
+    ChatUsers(
+        name: "Debra Hawkins",
+        messageText: "Thankyou, It's awesome",
+        imageURL: "assets/avatars/avatar_4.png",
+        time: "23 Mar"),
+    ChatUsers(
+        name: "Jacob Pena",
+        messageText: "will update you in evening",
+        imageURL: "assets/avatars/avatar_5.png",
+        time: "17 Mar"),
+    ChatUsers(
+        name: "Andrey Jones",
+        messageText: "Can you please share the file?",
+        imageURL: "assets/avatars/avatar_2.png",
+        time: "24 Feb"),
+    ChatUsers(
+        name: "John Wick",
+        messageText: "How are you?",
+        imageURL: "assets/avatars/avatar_3.png",
+        time: "18 Feb"),
+  ];
 }

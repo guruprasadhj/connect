@@ -7,6 +7,7 @@ import 'package:connect/screens/verify.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'firebase_options.dart';
 import 'package:connect/screens/login.dart';
 import 'package:connect/screens/home.dart';
@@ -21,15 +22,22 @@ Future<void> main() async {
 
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'connect',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
-      home: const MainPage(),
-    );
+    return ScreenUtilInit(
+        designSize: const Size(360, 800),
+        minTextAdapt: true,
+        useInheritedMediaQuery: true,
+        builder: (context, child) {
+          return MaterialApp(
+            title: 'connect',
+            theme: ThemeData(
+              primarySwatch: Colors.blue,
+            ),
+            home: const MainPage(),
+          );
+        });
   }
 }
 
@@ -43,7 +51,7 @@ class MainPage extends StatelessWidget {
         stream: FirebaseAuth.instance.authStateChanges(),
         builder: (context, snapshot) {
           if (snapshot.hasData) {
-            return HomeScreen();// HomePage();
+            return HomeScreen(); // HomePage();
           } else {
             return LoginScreen();
           }

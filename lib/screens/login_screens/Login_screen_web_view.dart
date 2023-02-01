@@ -10,6 +10,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:page_transition/page_transition.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../widgets/background_animation.dart';
 import '../../widgets/widget.dart';
@@ -23,6 +24,7 @@ class LoginWebScreen extends StatefulWidget {
 }
 
 class _LoginWebScreenState extends State<LoginWebScreen> {
+  final Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
   bool isLoading = false;
   bool isEmailValid = false;
   final _emailController = TextEditingController();
